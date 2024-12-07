@@ -30,7 +30,7 @@ pub fn main() !void {
     _ = try bufreader.readAll(buffer[0..]);
     try stdout.print("{s}\n", .{buffer});
 
-    // Initialise variables for use in creating the lists of distances:
+    // Initialise variables for use in creating the lists of locations:
     var i: usize = 0;
     var j: u64 = 2;
     var listSize: usize = 0;
@@ -70,15 +70,27 @@ pub fn main() !void {
     std.mem.sort(i64, list1, {}, comptime std.sort.asc(i64));
     std.mem.sort(i64, list2, {}, comptime std.sort.asc(i64));
 
-    var answer: i64 = 0;
-    // Calculate final answer as required:
+    var part1Answer: i64 = 0;
+    // Calculate final answer for part 1 as required:
     for (list1, list2) |list1item, list2item| {
         if (list1item > list2item) {
-            answer += (list1item - list2item);
+            part1Answer += (list1item - list2item);
         } else {
-            answer += (list2item - list1item);
+            part1Answer += (list2item - list1item);
         }
     }
 
-    try stdout.print("Answer: {d}\n", .{answer});
+    var part2Answer: i64 = 0;
+    for (list1) |list1item| {
+        var numMatches: i64 = 0;
+        for (list2) |list2item| {
+            if (list1item == list2item) {
+                numMatches += 1;
+            }
+        }
+        part2Answer += (numMatches * list1item);
+    }
+
+    try stdout.print("Part 1 Answer: {d}\n", .{part1Answer});
+    try stdout.print("Part 2 Answer: {d}\n", .{part2Answer});
 }
